@@ -55,7 +55,7 @@ public class OrderService {
 				.price(calculateFinalOrderPrice(route, car, this.orderRepository.findAllByUserId(user.getId())))
 				.user(user)
 				.driving(Driving.builder().car(car).driver(driver).build())
-				.timeToArrival(carArrivalRoute.time)
+				.timeToArrival(carArrivalRoute.getTime())
 				.dateOfOrder(LocalDateTime.now())
 				.build());
 	}
@@ -77,7 +77,7 @@ public class OrderService {
 	}
 	
 	private int getRouteRawPrice(Route route, Car car) {
-		int price = Math.round(route.distance*car.getPriceMultiplier()*STANDART_FEE_PER_KILOMETER)+BASE_RIDE_PRICE;
+		int price = Math.round(route.getDistance()*car.getPriceMultiplier()*STANDART_FEE_PER_KILOMETER)+BASE_RIDE_PRICE;
 		return price<MINIMAL_RIDE_PRICE?MINIMAL_RIDE_PRICE:price; 
 	}
 	

@@ -94,7 +94,7 @@ public class AuthService {
 	public Optional<String> getCurrentAuthenticatedUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return Optional.of(authentication.getName());
+			return Optional.of((String)authentication.getPrincipal());
 		}
 		return Optional.empty();
 	}

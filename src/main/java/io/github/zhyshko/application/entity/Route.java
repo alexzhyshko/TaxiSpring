@@ -28,10 +28,10 @@ public class Route {
 	private Integer id;
 	@ManyToOne
 	@JoinColumn(name="departure_coordinate_id", nullable = false)
-	public Coordinates departure;
+	private Coordinates departure;
 	@ManyToOne
 	@JoinColumn(name="destination_coordinate_id", nullable = false)
-	public Coordinates destination;
-	public Float distance;
-	public Integer time;
+	private Coordinates destination;
+	private Float distance;
+	private Integer time;
 }
