@@ -11,11 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.zhyshko.application.dto.AuthenticationResponse;
-import io.github.zhyshko.application.dto.LoginRequest;
-import io.github.zhyshko.application.dto.RefreshTokenRequest;
-import io.github.zhyshko.application.dto.RegisterRequest;
 import io.github.zhyshko.application.dto.UserToken;
+import io.github.zhyshko.application.dto.request.LoginRequest;
+import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
+import io.github.zhyshko.application.dto.request.RegisterRequest;
+import io.github.zhyshko.application.dto.response.AuthenticationResponse;
 import io.github.zhyshko.application.entity.Role;
 import io.github.zhyshko.application.entity.User;
 import io.github.zhyshko.application.entity.VerificationToken;

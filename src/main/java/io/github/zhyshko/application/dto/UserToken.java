@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserToken {
 
-	private String email;
 	private String token;
 	
 }

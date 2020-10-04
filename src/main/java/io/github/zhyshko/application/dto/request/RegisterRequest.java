@@ -1,4 +1,4 @@
-package io.github.zhyshko.application.dto;
+package io.github.zhyshko.application.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

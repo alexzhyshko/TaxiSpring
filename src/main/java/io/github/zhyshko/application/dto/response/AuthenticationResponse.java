@@ -1,4 +1,4 @@
-package io.github.zhyshko.application.dto;
+package io.github.zhyshko.application.dto.response;
 
 import java.time.Instant;
 

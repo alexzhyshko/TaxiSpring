@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.zhyshko.application.dto.AuthenticationResponse;
-import io.github.zhyshko.application.dto.LoginRequest;
-import io.github.zhyshko.application.dto.RefreshTokenRequest;
-import io.github.zhyshko.application.dto.RegisterRequest;
+import io.github.zhyshko.application.dto.request.LoginRequest;
+import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
+import io.github.zhyshko.application.dto.request.RegisterRequest;
+import io.github.zhyshko.application.dto.response.AuthenticationResponse;
 import io.github.zhyshko.application.service.AuthService;
 import io.github.zhyshko.application.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
