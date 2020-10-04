@@ -1,6 +1,5 @@
 package io.github.zhyshko.application.dto;
 
-import io.github.zhyshko.application.entity.CarStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +17,8 @@ public class Car {
 	private String manufacturer;
 	private String model;
 	private String category;
+	private String status;
 	private Integer passengerCount;
 	private Float priceMultiplier;
-	private CarStatus status;
 	private Coordinates coordinates;
 }

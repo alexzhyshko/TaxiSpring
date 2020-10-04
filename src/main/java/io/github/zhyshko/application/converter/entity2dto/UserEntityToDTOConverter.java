@@ -6,6 +6,7 @@ public class UserEntityToDTOConverter {
 	
 	public static io.github.zhyshko.application.dto.User convertToDto(io.github.zhyshko.application.entity.User entity){
 		return io.github.zhyshko.application.dto.User.builder()
+				.id(entity.getId())
 				.username(entity.getUsername())
 				.name(entity.getName())
 				.surname(entity.getSurname())

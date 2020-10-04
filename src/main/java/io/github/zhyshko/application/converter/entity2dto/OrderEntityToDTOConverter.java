@@ -6,6 +6,7 @@ public class OrderEntityToDTOConverter {
 	
 	public static io.github.zhyshko.application.dto.Order convertToDto(io.github.zhyshko.application.entity.Order entity, String userLocale){
 		return io.github.zhyshko.application.dto.Order.builder()
+				.id(entity.getId())
 				.route(RouteEntityToDTOConverter.convertToDto(entity.getRoute()))
 				.price(entity.getPrice())
 				.user(UserEntityToDTOConverter.convertToDto(entity.getUser()))

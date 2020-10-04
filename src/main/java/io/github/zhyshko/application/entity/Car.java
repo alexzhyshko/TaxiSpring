@@ -33,6 +33,9 @@ public class Car {
 	@ManyToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
 	private CarStatus status;
+	@ManyToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	private CarCategory category;
 	private Integer passengerCount;
 	private Float priceMultiplier;
 	@ManyToOne

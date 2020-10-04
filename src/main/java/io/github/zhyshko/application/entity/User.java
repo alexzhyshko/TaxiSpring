@@ -1,6 +1,7 @@
 package io.github.zhyshko.application.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private UUID id;
 	@Column(unique = true)
 	private String username;
 	private String name;

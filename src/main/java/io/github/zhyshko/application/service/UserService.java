@@ -22,12 +22,8 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public User getUserByIdLocalized(UUID userId, String userLocale) {
-		
-	}
-	
-	public User getUserByUsernameLocalized(String username, String userLocale) {
-		
+	public User getUserById(UUID userId) {
+		return userRepository.findById(userId).orElseThrow(()->new NullPointerException("No user found by id"));
 	}
 		
 		

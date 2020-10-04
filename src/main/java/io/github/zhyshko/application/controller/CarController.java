@@ -19,9 +19,9 @@ public class CarController {
 
 	private final CarService carService;
 	
-	@GetMapping("car/getAll")
+	@GetMapping("/car/getAll")
 	public ResponseEntity<List<Car>> getAllAvailableCars(@RequestHeader(required=true) String userLocale) {
-		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCarsLocalized(userLocale), userLocale);
+		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCars(), userLocale);
 		return new ResponseEntity<>(cars, HttpStatus.OK);
 	}
 	

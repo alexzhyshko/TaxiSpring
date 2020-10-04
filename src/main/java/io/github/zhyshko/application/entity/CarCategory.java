@@ -21,8 +21,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "car_status")
-public class CarStatus {
+@Table(name = "car_category")
+public class CarCategory {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

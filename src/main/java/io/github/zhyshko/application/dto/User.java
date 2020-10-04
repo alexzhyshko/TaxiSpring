@@ -1,6 +1,7 @@
 package io.github.zhyshko.application.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.github.zhyshko.application.entity.Role;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-	private Integer id;
+	private UUID id;
 	private String username;
 	private String name;
 	private String surname;

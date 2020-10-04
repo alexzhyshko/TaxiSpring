@@ -1,8 +1,10 @@
 package io.github.zhyshko.application.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -87,6 +89,14 @@ public class AuthService {
 				.expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
 				.username(refreshTokenRequest.getUsername())
 				.build();
+	}
+	
+	public Optional<String> getCurrentAuthenticatedUsername() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			return Optional.of(authentication.getName());
+		}
+		return Optional.empty();
 	}
 
 //	public boolean isLoggedIn() {

@@ -26,13 +26,13 @@ public class UserController {
 	
 	@GetMapping("/user/getById")
 	public ResponseEntity<User> getUserById(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) UUID userId) {
-		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserByIdLocalized(userId, userLocale));
+		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserById(userId));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	@GetMapping("/user/getByUsername")
 	public ResponseEntity<User> getUserByUsername(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) String username) {
-		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserByUsernameLocalized(username, userLocale));
+		User user = UserEntityToDTOConverter.convertToDto(this.userService.findUserByUsername(username));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	

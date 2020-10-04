@@ -1,6 +1,6 @@
 package io.github.zhyshko.application.dto.request;
 
-public class RouteCreateRequest {
+public class OrderCreateRequest {
 
 	private String departureLongitude;
 	private String departureLatitude;

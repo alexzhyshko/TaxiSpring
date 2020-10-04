@@ -25,7 +25,7 @@ public class AdminController {
 	private final OrderService orderService;
 	
 	@GetMapping("/admin/order/get/all")
-	public ResponseEntity<UserOrdersResponse> getAllOrdersSortedFilteredPagedLocalized(@RequestHeader(required=true) String userLocale, 
+	public ResponseEntity<UserOrdersResponse> getAllOrdersSortedFilteredPaged(@RequestHeader(required=true) String userLocale, 
 			@RequestParam(required = true) Boolean sort,
 			@RequestParam(required = true) Boolean filter,
 			@RequestParam(required = true) String sortBy,
@@ -41,7 +41,7 @@ public class AdminController {
 				.filterBy(filterBy)
 				.value(value)
 				.build();
-		UserOrdersResponse paginatedResponse = orderService.getAllOrdersPagedAndSortedAndLocalized(dto, userLocale);
+		UserOrdersResponse paginatedResponse = orderService.getAllOrdersPagedAndSortedAndFiltered(dto);
 		return new ResponseEntity<>(paginatedResponse, HttpStatus.OK);
 	}
 	

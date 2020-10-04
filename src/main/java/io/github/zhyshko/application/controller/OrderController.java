@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.zhyshko.application.dto.request.RouteCreateRequest;
-import io.github.zhyshko.application.dto.response.RouteDetails;
-import io.github.zhyshko.application.dto.response.UserOrdersResponse;
 import io.github.zhyshko.application.converter.entity2dto.OrderEntityToDTOConverter;
 import io.github.zhyshko.application.dto.Order;
+import io.github.zhyshko.application.dto.request.OrderCreateRequest;
+import io.github.zhyshko.application.dto.response.RouteDetails;
+import io.github.zhyshko.application.dto.response.UserOrdersResponse;
 import io.github.zhyshko.application.exception.RouteNotCreatedException;
 import io.github.zhyshko.application.exception.SomethingWentWrongException;
 import io.github.zhyshko.application.service.OrderService;
@@ -30,25 +30,25 @@ public class OrderController {
 	private final OrderService orderService;
 	
 	@PostMapping("/order/create")
-	public ResponseEntity<Order> tryCreateRoute(@RequestHeader(required=true) String userLocale, @RequestBody RouteCreateRequest routeDetails) {
-		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateRouteLocalized(routeDetails, userLocale), userLocale);
+	public ResponseEntity<Order> tryCreateOrder(@RequestHeader(required=true) String userLocale, @RequestBody OrderCreateRequest orderDetails) {
+		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateOrder(orderDetails), userLocale);
 		return new ResponseEntity<>(orderCreated, HttpStatus.OK);
 	}
 	
 	@PostMapping("/order/getRouteDetails")
-	public ResponseEntity<List<RouteDetails>> getRouteDetails(@RequestHeader(required=true) String userLocale, @RequestBody RouteCreateRequest routeDetails) {
-		List<RouteDetails> availableRoutesDetails = this.orderService.getAvailableRoutesDetailsLocalized(routeDetails, userLocale);
+	public ResponseEntity<List<RouteDetails>> getRouteDetails(@RequestHeader(required=true) String userLocale, @RequestBody OrderCreateRequest orderDetails) {
+		List<RouteDetails> availableRoutesDetails = this.orderService.getAvailableRoutesDetails(orderDetails);
 		return new ResponseEntity<>(availableRoutesDetails, HttpStatus.OK);
 	}
 	
 	@GetMapping("/order/get/byUserId")
 	public ResponseEntity<UserOrdersResponse> getOrdersByUserId(@RequestHeader(required=true) String userLocale, @RequestParam String type, @RequestParam UUID userId, @RequestParam Integer page) {
-		UserOrdersResponse userOrdersPage = this.orderService.getOrdersByUserIdPaginatedLocalized(userId, page, type, userLocale);
+		UserOrdersResponse userOrdersPage = this.orderService.getOrdersByUserIdPaginated(userId, page, type);
 		return new ResponseEntity<>(userOrdersPage, HttpStatus.OK);
 	}
 	
 	public ResponseEntity<String> finishOrderById(@RequestHeader(required=true) String userLocale, @RequestParam Integer orderId) {
-		if(!this.orderService.tryFinishOrderByIdLocalized(orderId, userLocale))
+		if(!this.orderService.tryFinishOrderById(orderId))
 			throw new SomethingWentWrongException("Could not finish order");
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
