@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.zhyshko.application.dto.request.RouteCreateRequest;
 import io.github.zhyshko.application.dto.response.RouteDetails;
 import io.github.zhyshko.application.dto.response.UserOrdersResponse;
-import io.github.zhyshko.application.entity.Order;
+import io.github.zhyshko.application.converter.entity2dto.OrderEntityToDTOConverter;
+import io.github.zhyshko.application.dto.Order;
 import io.github.zhyshko.application.exception.RouteNotCreatedException;
 import io.github.zhyshko.application.exception.SomethingWentWrongException;
 import io.github.zhyshko.application.service.OrderService;
@@ -30,7 +31,7 @@ public class OrderController {
 	
 	@PostMapping("/order/create")
 	public ResponseEntity<Order> tryCreateRoute(@RequestHeader(required=true) String userLocale, @RequestBody RouteCreateRequest routeDetails) {
-		Order orderCreated = orderService.tryCreateRouteLocalized(routeDetails, userLocale);
+		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateRouteLocalized(routeDetails, userLocale), userLocale);
 		return new ResponseEntity<>(orderCreated, HttpStatus.OK);
 	}
 	

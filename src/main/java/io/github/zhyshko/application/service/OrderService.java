@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import io.github.zhyshko.application.dto.PaginationFilteringSortingDTO;
+import io.github.zhyshko.application.dto.misc.PaginationFilteringSortingDTO;
 import io.github.zhyshko.application.dto.request.RouteCreateRequest;
 import io.github.zhyshko.application.dto.response.RouteDetails;
 import io.github.zhyshko.application.dto.response.UserOrdersResponse;

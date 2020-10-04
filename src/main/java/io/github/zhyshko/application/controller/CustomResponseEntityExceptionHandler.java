@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import io.github.zhyshko.application.dto.ErrorMessage;
+import io.github.zhyshko.application.dto.misc.ErrorMessage;
 
 @ControllerAdvice
 @RestController
@@ -20,7 +20,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler(AccessDeniedException.class)
     public final ResponseEntity<ErrorMessage> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         ErrorMessage errorDetails = new ErrorMessage(LocalDateTime.now(), ex.getMessage());
-        System.out.println("aksmdakljdlkajdlkjl");
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 

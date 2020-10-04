@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.zhyshko.application.entity.User;
+import io.github.zhyshko.application.converter.entity2dto.UserEntityToDTOConverter;
+import io.github.zhyshko.application.dto.User;
 import io.github.zhyshko.application.exception.SomethingWentWrongException;
 import io.github.zhyshko.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,13 @@ public class UserController {
 	
 	@GetMapping("/user/getById")
 	public ResponseEntity<User> getUserById(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) UUID userId) {
-		User user = this.userService.getUserByIdLocalized(userId, userLocale);
+		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserByIdLocalized(userId, userLocale));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
 	@GetMapping("/user/getByUsername")
 	public ResponseEntity<User> getUserByUsername(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) String username) {
-		User user = this.userService.getUserByUsernameLocalized(username, userLocale);
+		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserByUsernameLocalized(username, userLocale));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	

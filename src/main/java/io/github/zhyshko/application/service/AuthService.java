@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.zhyshko.application.dto.UserToken;
+import io.github.zhyshko.application.dto.misc.UserToken;
 import io.github.zhyshko.application.dto.request.LoginRequest;
 import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
 import io.github.zhyshko.application.dto.request.RegisterRequest;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.zhyshko.application.dto.PaginationFilteringSortingDTO;
+import io.github.zhyshko.application.dto.misc.PaginationFilteringSortingDTO;
 import io.github.zhyshko.application.dto.response.UserOrdersResponse;
 import io.github.zhyshko.application.service.OrderService;
 import lombok.RequiredArgsConstructor;

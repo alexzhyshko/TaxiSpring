@@ -1,4 +1,4 @@
-package io.github.zhyshko.application.dto;
+package io.github.zhyshko.application.dto.misc;
 
 import java.time.LocalDateTime;
 

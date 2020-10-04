@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.zhyshko.application.entity.Car;
+import io.github.zhyshko.application.converter.entity2dto.CarEntityToDTOConverter;
+import io.github.zhyshko.application.dto.Car;
 import io.github.zhyshko.application.service.CarService;
 import lombok.RequiredArgsConstructor;
 
@@ -16,12 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CarController {
 
-	
 	private final CarService carService;
 	
 	@GetMapping("car/getAll")
 	public ResponseEntity<List<Car>> getAllAvailableCars(@RequestHeader(required=true) String userLocale) {
-		List<Car> cars = this.carService.getAllAvailableCarsLocalized(userLocale);
+		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCarsLocalized(userLocale), userLocale);
 		return new ResponseEntity<>(cars, HttpStatus.OK);
 	}
 	

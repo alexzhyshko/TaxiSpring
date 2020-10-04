@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import io.github.zhyshko.application.dto.UserDetailsImpl;
+import io.github.zhyshko.application.dto.misc.UserDetailsImpl;
 import io.github.zhyshko.application.entity.User;
 import io.github.zhyshko.application.repository.UserRepository;
 import lombok.AllArgsConstructor;

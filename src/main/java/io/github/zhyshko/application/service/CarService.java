@@ -5,10 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import io.github.zhyshko.application.entity.Car;
+import io.github.zhyshko.application.repository.CarRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CarService {
 
+	private final CarRepository carRepository;
+	
 	public List<Car> getAllAvailableCarsLocalized(String userLocale){
 		
 	}

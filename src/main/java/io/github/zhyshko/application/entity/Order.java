@@ -2,14 +2,12 @@ package io.github.zhyshko.application.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -42,8 +40,8 @@ public class Order {
 	private Driving driving;
 	private Integer timeToArrival;
 	private LocalDateTime dateOfOrder;
-	@ManyToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-	private Translation translations;
+	@ManyToOne
+	@JoinColumn(name="status_id", nullable = false)
+	private OrderStatus status;
 
 }
