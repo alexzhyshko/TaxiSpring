@@ -1,5 +1,7 @@
 package io.github.zhyshko.application.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +22,14 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	public User getUserByIdLocalized(UUID userId, String userLocale) {
+		
+	}
+	
+	public User getUserByUsernameLocalized(String username, String userLocale) {
+		
+	}
+		
+		
 	
 }
