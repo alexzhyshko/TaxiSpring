@@ -58,13 +58,14 @@ public class RouteService {
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			RoutesApiResponse responseObject = gson.fromJson(responseString, RoutesApiResponse.class);
-			Route result = new Route();
 			responseObject.getRoutes()
 					.sort((o1, o2) -> Integer.compare((int) o1.getDuration(), (int) o1.getDuration()));
-			result.distance = responseObject.getRoutes().get(0).getDistance() / 1000;
-			result.time = (int) responseObject.getRoutes().get(0).getDuration() / 60;
-			result.departure = departurePoint;
-			result.destination = destinationPoint;
+			Route result = Route.builder()
+					.distance(responseObject.getRoutes().get(0).getDistance() / 1000)
+					.time((int) responseObject.getRoutes().get(0).getDuration() / 60)
+					.departure(departurePoint)
+					.destination(destinationPoint)
+					.build();
 			return Optional.of(result);
 		} catch (IOException e1) {
 			e1.printStackTrace();
