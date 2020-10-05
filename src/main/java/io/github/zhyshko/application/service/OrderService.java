@@ -145,10 +145,8 @@ public class OrderService {
 	public List<RouteDetails> getAvailableRoutesDetailsByEveryCategory(OrderCreateRequest routeDetails,
 			String userLocale) {
 		List<RouteDetails> result = new ArrayList<>();
-		Coordinates departureCoordinates = Coordinates.builder().latitude(routeDetails.getDepartureLatitude())
-				.longitude(routeDetails.getDepartureLongitude()).build();
-		Coordinates destinationCoordinates = Coordinates.builder().latitude(routeDetails.getDestinationLatitude())
-				.longitude(routeDetails.getDestinationLongitude()).build();
+		Coordinates departureCoordinates = buildDepartureCoordinates(routeDetails);
+		Coordinates destinationCoordinates = buildDestinationCoordinates(routeDetails);
 		Route customerRoute = this.routeService.tryGetRoute(departureCoordinates, destinationCoordinates)
 				.orElseThrow(() -> new RouteNotFoundException("Could not build route"));
 		for (CarCategory category : CarCategory.values()) {
@@ -158,8 +156,8 @@ public class OrderService {
 				Route carArrivalRoute = this.routeService
 						.tryGetRoute(nearestCarByCategory.getCoordinates(), departureCoordinates)
 						.orElseThrow(() -> new RouteNotFoundException("Could not build route"));
-				int carArrivalTime = carArrivalRoute.getTime();
-				result.add(RouteDetails.builder().arrivalTime(carArrivalTime)
+				result.add(RouteDetails.builder()
+						.arrivalTime(carArrivalRoute.getTime())
 						.categoryLocaleName(TranslationsConverter
 								.extractLocalizedText(nearestCarByCategory.getCategory().getTranslation(), userLocale))
 						.price(getRouteRawPrice(customerRoute, nearestCarByCategory)).build());

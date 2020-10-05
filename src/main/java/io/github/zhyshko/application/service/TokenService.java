@@ -1,7 +1,5 @@
 package io.github.zhyshko.application.service;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,6 @@ public class TokenService {
 	@Autowired
 	VerificationTokenRepository tokenRepository;
 	
-	@Transactional
 	public void deleteTokenByUser(User user) {
 		tokenRepository.deleteTokenByUser(user);
 	}

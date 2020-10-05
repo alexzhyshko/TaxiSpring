@@ -21,7 +21,6 @@ import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
 import io.github.zhyshko.application.entity.Role;
 import io.github.zhyshko.application.entity.User;
 import io.github.zhyshko.application.entity.VerificationToken;
-import io.github.zhyshko.application.exception.DuplicateLoginException;
 import io.github.zhyshko.application.repository.UserRepository;
 import io.github.zhyshko.application.repository.VerificationTokenRepository;
 import io.github.zhyshko.application.security.JwtProvider;

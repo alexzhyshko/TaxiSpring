@@ -18,11 +18,11 @@ import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
 import io.github.zhyshko.application.exception.DuplicateLoginException;
 import io.github.zhyshko.application.service.AuthService;
 import io.github.zhyshko.application.service.RefreshTokenService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthController {
 
 	private final AuthService authService;
