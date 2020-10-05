@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -30,9 +31,10 @@ public class VerificationToken {
 		name = "UUID",
 		strategy = "org.hibernate.id.UUIDGenerator"
 	)
-	@Column(columnDefinition = "BINARY(16)")
+	@Column(columnDefinition = "binary(16)")
 	private UUID id;
 	@OneToOne(fetch = javax.persistence.FetchType.LAZY)
+	@PrimaryKeyJoinColumn
 	private User user;
 	private String token;
 	

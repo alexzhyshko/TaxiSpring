@@ -19,9 +19,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import io.github.zhyshko.application.dto.misc.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -45,7 +45,7 @@ public class JwtProvider {
 	}
 
 	public String generateToken(Authentication authentication) {
-		User principal = (User) authentication.getPrincipal();
+		UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 		return Jwts.builder()
 				.setSubject(principal.getUsername())
 				.setIssuedAt(from(Instant.now()))

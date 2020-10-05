@@ -2,6 +2,7 @@ package io.github.zhyshko.application.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,17 +29,21 @@ public class Car {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String plate;
-	private String manufacturer;
-	private String model;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	private Manufacturer manufacturer;
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	private Model model;
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
 	private CarStatus status;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @PrimaryKeyJoinColumn
 	private CarCategory category;
 	private Integer passengerCount;
 	private Float priceMultiplier;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="coordinates_id", nullable = false)
 	private Coordinates coordinates;
 	

@@ -1,5 +1,8 @@
 package io.github.zhyshko.application.converter.entity2dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OrderEntityToDTOConverter {
 
 	private OrderEntityToDTOConverter() {}
@@ -17,6 +20,10 @@ public class OrderEntityToDTOConverter {
 				.status(TranslationsConverter.extractLocalizedText(entity.getStatus().getTranslation(), userLocale))
 				.statusid(entity.getStatus().getId())
 				.build();
+	}
+	
+	public static List<io.github.zhyshko.application.dto.Order> convertToDto(List<io.github.zhyshko.application.entity.Order> entities, String userLocale){
+		return entities.stream().map(entity->convertToDto(entity, userLocale)).collect(Collectors.toList());
 	}
 	
 }

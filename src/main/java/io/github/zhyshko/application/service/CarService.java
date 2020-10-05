@@ -6,11 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import io.github.zhyshko.application.entity.Car;
+import io.github.zhyshko.application.entity.CarStatus;
 import io.github.zhyshko.application.entity.Coordinates;
 import io.github.zhyshko.application.exception.NearestCarTooFarException;
 import io.github.zhyshko.application.exception.NoCarsFoundException;
 import io.github.zhyshko.application.exception.NoCarsNearFoundException;
 import io.github.zhyshko.application.repository.CarRepository;
+import io.github.zhyshko.application.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,9 +22,28 @@ public class CarService {
 	private static final int CAR_SEARCH_RADIUS_KM = 100;
 	
 	private final CarRepository carRepository;
+	private final OrderRepository orderRepository;
 	
 	public List<Car> getAllAvailableCars(){
-		return this.carRepository.findAllByStatus(1).orElseThrow(()->new NoCarsFoundException("No active cars found"));
+		return this.carRepository.findAllByStatusId(1).orElseThrow(()->new NoCarsFoundException("No active cars found"));
+	}
+	
+	public void setCarBusy(Car car) {
+		setCarStatus(car, 2);
+	}
+	
+	public void setCarFree(Car car) {
+		setCarStatus(car, 1);
+	}
+	
+	public void setCarStatus(Car car, int statusId) {
+		CarStatus status = findCarStatusById(statusId);
+		car.setStatus(status);
+		this.carRepository.save(car);
+	}
+	
+	public CarStatus findCarStatusById(int statusId) {
+		return this.carRepository.findCarStatusById(statusId);
 	}
 	
 	public Car getNearestCarByPlacesCountAndCategory(Coordinates customerCoordinates, int passengerCount, String category) {
@@ -37,7 +58,7 @@ public class CarService {
 	}
 	
 	public Car getCarByOrderId(int orderid) {
-		return this.carRepository.findByOrderId(orderid).orElseThrow(()->new NoCarsFoundException("No car found by order"));
+		return this.orderRepository.findCarById(orderid).orElseThrow(()->new NoCarsFoundException("No car found by order"));
 	}
 	
 	

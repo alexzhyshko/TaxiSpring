@@ -30,37 +30,40 @@ public class OrderController {
 	private final OrderService orderService;
 	
 	@PostMapping("/order/create")
-	public ResponseEntity<Order> tryCreateOrder(@RequestHeader(required=true) String userLocale, @RequestBody OrderCreateRequest orderDetails) {
+	public ResponseEntity<Order> tryCreateOrder(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestBody(required=true) OrderCreateRequest orderDetails) {
 		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateOrder(orderDetails), userLocale);
 		return new ResponseEntity<>(orderCreated, HttpStatus.OK);
 	}
 	
 	@PostMapping("/order/getRouteDetails")
-	public ResponseEntity<List<RouteDetails>> getRouteDetails(@RequestHeader(required=true) String userLocale, @RequestBody OrderCreateRequest orderDetails) {
-		List<RouteDetails> availableRoutesDetails = this.orderService.getAvailableRoutesDetails(orderDetails);
+	public ResponseEntity<List<RouteDetails>> getRouteDetails(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestBody(required=true) OrderCreateRequest orderDetails) {
+		List<RouteDetails> availableRoutesDetails = this.orderService.getAvailableRoutesDetailsByEveryCategory(orderDetails, userLocale);
 		return new ResponseEntity<>(availableRoutesDetails, HttpStatus.OK);
 	}
 	
 	@GetMapping("/order/get/byUserId")
-	public ResponseEntity<UserOrdersResponse> getOrdersByUserId(@RequestHeader(required=true) String userLocale, @RequestParam String type, @RequestParam UUID userId, @RequestParam Integer page) {
-		UserOrdersResponse userOrdersPage = this.orderService.getOrdersByUserIdPaginated(userId, page, type);
+	public ResponseEntity<UserOrdersResponse> getOrdersByUserId(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) UUID userId, @RequestParam(required=true) Integer page) {
+		UserOrdersResponse userOrdersPage = this.orderService.getOrdersByUserIdPaginated(userId, page, userLocale);
 		return new ResponseEntity<>(userOrdersPage, HttpStatus.OK);
 	}
 	
-	public ResponseEntity<String> finishOrderById(@RequestHeader(required=true) String userLocale, @RequestParam Integer orderId) {
+	@GetMapping("/order/finish")
+	public ResponseEntity<String> finishOrderById(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) Integer orderId) {
 		if(!this.orderService.tryFinishOrderById(orderId))
 			throw new SomethingWentWrongException("Could not finish order");
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Order finished", HttpStatus.OK);
 	}
 	
 
 	@ExceptionHandler({ RouteNotCreatedException.class})
     public ResponseEntity<String> handleRouteNotCreatedException(RouteNotCreatedException e) {
+		e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 	
 	@ExceptionHandler({ SomethingWentWrongException.class})
     public ResponseEntity<String> handleException(Exception e) {
+		e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 	

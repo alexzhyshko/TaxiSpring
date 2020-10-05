@@ -11,6 +11,7 @@ public class UserEntityToDTOConverter {
 				.name(entity.getName())
 				.surname(entity.getSurname())
 				.rating(entity.getRating())
+				.role(entity.getRole())
 				.build();
 	}
 	

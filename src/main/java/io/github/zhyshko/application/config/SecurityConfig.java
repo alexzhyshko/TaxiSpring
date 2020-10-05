@@ -1,5 +1,7 @@
 package io.github.zhyshko.application.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import io.github.zhyshko.application.security.JwtAuthenticationFilter;
 import io.github.zhyshko.application.service.UserDetailsServiceImpl;
@@ -26,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.cors();
 		httpSecurity
 		.csrf().disable()
 		.authorizeRequests()
@@ -33,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/car/**").permitAll()
 		.antMatchers("/order/**").permitAll()
 		.antMatchers("/driver/**").permitAll()
-		.antMatchers("/auth/**").permitAll()
+		.antMatchers("/register/**", "/login/**", "/refreshToken/**").permitAll()
 		.antMatchers("/admin/**").hasAuthority("ADMIN")
 		.antMatchers("/v2/api-docs", 
 				"/configuration/ui",
@@ -43,11 +49,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"webjars/**")
 		.permitAll()
 		.anyRequest()
-		.authenticated();
+		.authenticated()
+		.and().sessionManagement()
+	    .maximumSessions(1)
+	    .maxSessionsPreventsLogin(true);
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
 	
+	 @Bean
+	    public CorsConfigurationSource corsConfigurationSource() {
+	        final CorsConfiguration configuration = new CorsConfiguration();
+	        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+	        configuration.setAllowedMethods(Arrays.asList("HEAD","GET", "POST", "PUT", "DELETE", "PATCH"));
+	        configuration.setAllowCredentials(true);
+	        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "User_Locale"));
+	        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        source.registerCorsConfiguration("/**", configuration);
+	        return source;
+	    }
 
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
 	@Override

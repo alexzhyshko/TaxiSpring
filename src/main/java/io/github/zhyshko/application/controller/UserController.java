@@ -24,14 +24,14 @@ public class UserController {
 
 	private final UserService userService;
 	
-	@GetMapping("/user/getById")
-	public ResponseEntity<User> getUserById(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) UUID userId) {
+	@GetMapping("/getById")
+	public ResponseEntity<User> getUserById(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) UUID userId) {
 		User user = UserEntityToDTOConverter.convertToDto(this.userService.getUserById(userId));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
-	@GetMapping("/user/getByUsername")
-	public ResponseEntity<User> getUserByUsername(@RequestHeader(required=true) String userLocale, @RequestParam(required=true) String username) {
+	@GetMapping("/getByUsername")
+	public ResponseEntity<User> getUserByUsername(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) String username) {
 		User user = UserEntityToDTOConverter.convertToDto(this.userService.findUserByUsername(username));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}

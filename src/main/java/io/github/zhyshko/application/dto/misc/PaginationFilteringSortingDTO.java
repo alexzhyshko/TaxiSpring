@@ -9,8 +9,9 @@ import lombok.Setter;
 @Builder
 public class PaginationFilteringSortingDTO {
 
-	private Boolean sort;
-	private Boolean filter;
+	private int page;
+	private boolean sort;
+	private boolean filter;
 	private String sortBy;
 	private String sortOrder;
 	private String filterBy;

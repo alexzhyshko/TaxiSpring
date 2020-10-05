@@ -1,6 +1,5 @@
 package io.github.zhyshko.application.service;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,14 +12,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.github.zhyshko.application.dto.misc.UserDetailsImpl;
 import io.github.zhyshko.application.dto.misc.UserToken;
 import io.github.zhyshko.application.dto.request.LoginRequest;
-import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
 import io.github.zhyshko.application.dto.request.RegisterRequest;
-import io.github.zhyshko.application.dto.response.AuthenticationResponse;
+import io.github.zhyshko.application.dto.response.LoginResponse;
+import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
 import io.github.zhyshko.application.entity.Role;
 import io.github.zhyshko.application.entity.User;
 import io.github.zhyshko.application.entity.VerificationToken;
+import io.github.zhyshko.application.exception.DuplicateLoginException;
 import io.github.zhyshko.application.repository.UserRepository;
 import io.github.zhyshko.application.repository.VerificationTokenRepository;
 import io.github.zhyshko.application.security.JwtProvider;
@@ -67,41 +68,34 @@ public class AuthService {
 		return token;
 	}
 
-	public AuthenticationResponse login(LoginRequest loginRequest) {
+	public LoginResponse login(LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtProvider.generateToken(authentication);
-		return AuthenticationResponse.builder()
-				.authenticationToken(token)
+		return LoginResponse.builder()
+				.token(token)
 				.refreshToken(refreshTokenService.generateRefreshToken().getToken())
-				.expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
 				.username(loginRequest.getUsername())
 				.build();
 	}
+	
 
-	public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-		refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
-		String token = jwtProvider.generateTokenWithUsername(refreshTokenRequest.getUsername());
-		return AuthenticationResponse.builder()
-				.authenticationToken(token)
-				.refreshToken(refreshTokenRequest.getRefreshToken())
-				.expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
-				.username(refreshTokenRequest.getUsername())
+	public RefreshTokenResponse refreshToken(String refreshToken, String username) {
+		refreshTokenService.validateRefreshToken(refreshToken);
+		String token = jwtProvider.generateTokenWithUsername(username);
+		return RefreshTokenResponse.builder()
+				.token(token)
+				.refreshToken(refreshToken)
 				.build();
 	}
 	
 	public Optional<String> getCurrentAuthenticatedUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return Optional.of((String)authentication.getPrincipal());
+			return Optional.of(((UserDetailsImpl)authentication.getPrincipal()).getUsername());
 		}
 		return Optional.empty();
 	}
-
-//	public boolean isLoggedIn() {
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-//	}
 
 }

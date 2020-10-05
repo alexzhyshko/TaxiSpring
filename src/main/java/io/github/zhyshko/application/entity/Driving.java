@@ -2,7 +2,10 @@ package io.github.zhyshko.application.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,19 +25,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "driving")
+@Table(name = "Driving")
 public class Driving {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="car_id", nullable = false)
 	private Car car;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
 	@JoinColumn(name="driver_id", nullable = false)
 	private Driver driver;
 	
-	private LocalDate dateOfDriving;
+	@Column(name="dayOfDriving")
+	private LocalDate dayOfDriving;
 	
 }
