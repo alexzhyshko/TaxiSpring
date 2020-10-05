@@ -31,7 +31,7 @@ public class OrderController {
 	
 	@PostMapping("/order/create")
 	public ResponseEntity<Order> tryCreateOrder(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestBody(required=true) OrderCreateRequest orderDetails) {
-		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateOrder(orderDetails), userLocale);
+		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateRouteAndThenOrder(orderDetails), userLocale);
 		return new ResponseEntity<>(orderCreated, HttpStatus.OK);
 	}
 	

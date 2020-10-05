@@ -17,7 +17,6 @@ import io.github.zhyshko.application.dto.response.LoginResponse;
 import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
 import io.github.zhyshko.application.exception.DuplicateLoginException;
 import io.github.zhyshko.application.service.AuthService;
-import io.github.zhyshko.application.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
-	private final RefreshTokenService refreshTokenService;
 
 	@PostMapping("/register")
 	public ResponseEntity<String> signup(@RequestBody(required=true) RegisterRequest registerRequest) {
@@ -51,8 +49,8 @@ public class AuthController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<String> logout(@RequestBody(required=true) RefreshTokenRequest refreshTokenRequest) {
-		refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
-		return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!!");
+		this.authService.logout(refreshTokenRequest);
+		return ResponseEntity.status(HttpStatus.OK).body("Logged out");
 	}
 	
 	@ExceptionHandler({ DuplicateLoginException.class})

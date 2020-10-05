@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import io.github.zhyshko.application.dto.misc.UserDetailsImpl;
 import io.github.zhyshko.application.dto.misc.UserToken;
 import io.github.zhyshko.application.dto.request.LoginRequest;
+import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
 import io.github.zhyshko.application.dto.request.RegisterRequest;
 import io.github.zhyshko.application.dto.response.LoginResponse;
 import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
@@ -95,6 +96,10 @@ public class AuthService {
 			return Optional.of(((UserDetailsImpl)authentication.getPrincipal()).getUsername());
 		}
 		return Optional.empty();
+	}
+	
+	public void logout(RefreshTokenRequest refreshTokenRequest) {
+		refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
 	}
 
 }

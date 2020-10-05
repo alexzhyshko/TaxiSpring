@@ -107,12 +107,20 @@ public class OrderService {
 		return orders;
 	}
 
-	@Transactional
-	public Order tryCreateOrder(OrderCreateRequest routeDetails) {
+	public Order tryCreateRouteAndThenOrder(OrderCreateRequest routeDetails) {
 		Coordinates departure = buildDepartureCoordinates(routeDetails);
 		Coordinates destination = buildDestinationCoordinates(routeDetails);
 		Route route = routeService.tryGetRoute(departure, destination)
 				.orElseThrow(() -> new RouteNotFoundException("Could not build route"));
+		long start = System.currentTimeMillis();
+		Order order =  tryCreateOrder(routeDetails, route, departure);
+		long end = System.currentTimeMillis();
+		System.out.println((end-start)+"ms.");
+		return order;
+	}
+	
+	@Transactional
+	private Order tryCreateOrder(OrderCreateRequest routeDetails, Route route, Coordinates departure) {
 		String username = authService.getCurrentAuthenticatedUsername()
 				.orElseThrow(() -> new SomethingWentWrongException("User is not authenticated"));
 		User user = userService.findUserByUsername(username);
