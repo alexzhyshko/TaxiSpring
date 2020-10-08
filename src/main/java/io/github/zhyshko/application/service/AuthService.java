@@ -15,13 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import io.github.zhyshko.application.dto.misc.UserDetailsImpl;
 import io.github.zhyshko.application.dto.misc.UserToken;
 import io.github.zhyshko.application.dto.request.LoginRequest;
-import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
+import io.github.zhyshko.application.dto.request.LogoutRequest;
 import io.github.zhyshko.application.dto.request.RegisterRequest;
 import io.github.zhyshko.application.dto.response.LoginResponse;
 import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
 import io.github.zhyshko.application.entity.Role;
 import io.github.zhyshko.application.entity.User;
 import io.github.zhyshko.application.entity.VerificationToken;
+import io.github.zhyshko.application.exception.DuplicateLoginException;
 import io.github.zhyshko.application.repository.UserRepository;
 import io.github.zhyshko.application.repository.VerificationTokenRepository;
 import io.github.zhyshko.application.security.JwtProvider;
@@ -37,7 +38,7 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
-
+	
 	@Transactional
 	public void verifyAccount(String token) {
 		String username = verificationTokenRepository.findByToken(token)
@@ -69,6 +70,7 @@ public class AuthService {
 	}
 
 	public LoginResponse login(LoginRequest loginRequest) {
+		LoginRegister.addToRegisterIfNotLoggedIn(loginRequest.getUsername()).orElseThrow(()-> new DuplicateLoginException("User is already logged in"));
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -83,6 +85,7 @@ public class AuthService {
 
 	public RefreshTokenResponse refreshToken(String refreshToken, String username) {
 		refreshTokenService.validateRefreshToken(refreshToken);
+		LoginRegister.addToRegisterIfNotLoggedIn(username);
 		String token = jwtProvider.generateTokenWithUsername(username);
 		return RefreshTokenResponse.builder()
 				.token(token)
@@ -98,8 +101,9 @@ public class AuthService {
 		return Optional.empty();
 	}
 	
-	public void logout(RefreshTokenRequest refreshTokenRequest) {
-		refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+	public void logout(LogoutRequest logoutRequest) {
+		SecurityContextHolder.getContext().setAuthentication(null);
+		refreshTokenService.deleteRefreshToken(logoutRequest.getRefreshToken());
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,14 +44,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			}
 			throw new IllegalArgumentException("Auth token is null or empty");
 		} catch (NullPointerException | IllegalArgumentException | JwtException e) {
-			response.setStatus(403);
+			response.setStatus(401);
 			response.getWriter().write("403 Forbidden");
 		}  
 	}
 
 	private boolean checkFilterExceptions(HttpServletRequest request) {
 		String url = request.getRequestURL().toString();
-		return checkRefreshTokenException(url) || checkLoginException(url) || checkSignupException(url);
+		return checkRefreshTokenException(url) || checkLoginException(url) || checkSignupException(url) || checkSignoffException(url);
 	}
 
 	private boolean checkRefreshTokenException(String url) {
@@ -63,6 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private boolean checkSignupException(String url) {
 		return url.contains("register");
+	}
+	
+	private boolean checkSignoffException(String url) {
+		return url.contains("signoff");
 	}
 
 	private void authenticateUser(HttpServletRequest request, String jwt) {

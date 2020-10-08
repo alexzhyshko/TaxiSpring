@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.zhyshko.application.dto.request.LoginRequest;
-import io.github.zhyshko.application.dto.request.RefreshTokenRequest;
+import io.github.zhyshko.application.dto.request.LogoutRequest;
 import io.github.zhyshko.application.dto.request.RegisterRequest;
 import io.github.zhyshko.application.dto.response.LoginResponse;
 import io.github.zhyshko.application.dto.response.RefreshTokenResponse;
@@ -47,21 +47,21 @@ public class AuthController {
 		return authService.refreshToken(refreshToken, username);
 	}
 
-	@PostMapping("/logout")
-	public ResponseEntity<String> logout(@RequestBody(required=true) RefreshTokenRequest refreshTokenRequest) {
-		this.authService.logout(refreshTokenRequest);
+	@PostMapping("/signoff")
+	public ResponseEntity<String> logout(@RequestBody LogoutRequest logoutRequest) {
+		this.authService.logout(logoutRequest);
 		return ResponseEntity.status(HttpStatus.OK).body("Logged out");
 	}
 	
 	@ExceptionHandler({ DuplicateLoginException.class})
     public ResponseEntity<String> handleDuplicateLoginException(Exception e) {
-		e.printStackTrace();
+		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 	
 	@ExceptionHandler({ Exception.class})
     public ResponseEntity<String> handleException(Exception e) {
-		e.printStackTrace();
+		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 

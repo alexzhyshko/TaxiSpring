@@ -112,11 +112,7 @@ public class OrderService {
 		Coordinates destination = buildDestinationCoordinates(routeDetails);
 		Route route = routeService.tryGetRoute(departure, destination)
 				.orElseThrow(() -> new RouteNotFoundException("Could not build route"));
-		long start = System.currentTimeMillis();
-		Order order =  tryCreateOrder(routeDetails, route, departure);
-		long end = System.currentTimeMillis();
-		System.out.println((end-start)+"ms.");
-		return order;
+		return tryCreateOrder(routeDetails, route, departure);
 	}
 	
 	@Transactional
@@ -194,8 +190,7 @@ public class OrderService {
 		Order order = this.orderRepository.findById(orderId)
 				.orElseThrow(() -> new SomethingWentWrongException("Could not find an order by id"));
 		setOrderFinished(order);
-		Car car = order.getDriving().getCar();
-		this.carService.setCarFree(car);
+		this.carService.setCarFree(order.getDriving().getCar());
 		return true;
 	}
 

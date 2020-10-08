@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -39,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/car/**").permitAll()
 		.antMatchers("/order/**").permitAll()
 		.antMatchers("/driver/**").permitAll()
-		.antMatchers("/register/**", "/login/**", "/refreshToken/**").permitAll()
+		.antMatchers("/register/**", "/login/**", "/refreshToken/**", "/signoff/**").permitAll()
 		.antMatchers("/admin/**").hasAuthority("ADMIN")
 		.antMatchers("/v2/api-docs", 
 				"/configuration/ui",
@@ -50,12 +53,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll()
 		.anyRequest()
 		.authenticated()
-		.and().sessionManagement()
+		.and()
+	    .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 	    .maximumSessions(1)
+	    .sessionRegistry(getSessionRegistry())
 	    .maxSessionsPreventsLogin(true);
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
+	
+	@Bean(name = "sessionRegistry")
+    public SessionRegistry getSessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 	
 	 @Bean
 	    public CorsConfigurationSource corsConfigurationSource() {
