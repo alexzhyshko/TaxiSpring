@@ -102,6 +102,7 @@ public class AuthService {
 	}
 	
 	public void logout(LogoutRequest logoutRequest) {
+		LoginRegister.removeFromRegisterIfLoggedIn(logoutRequest.getUsername()).orElseThrow(()-> new DuplicateLoginException("User is not logged in"));
 		SecurityContextHolder.getContext().setAuthentication(null);
 		refreshTokenService.deleteRefreshToken(logoutRequest.getRefreshToken());
 	}
