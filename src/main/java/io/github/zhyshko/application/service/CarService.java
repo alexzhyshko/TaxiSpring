@@ -1,17 +1,21 @@
 package io.github.zhyshko.application.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import io.github.zhyshko.application.entity.Car;
 import io.github.zhyshko.application.entity.CarStatus;
 import io.github.zhyshko.application.entity.Coordinates;
+import io.github.zhyshko.application.entity.Driving;
 import io.github.zhyshko.application.exception.NearestCarTooFarException;
 import io.github.zhyshko.application.exception.NoCarsFoundException;
 import io.github.zhyshko.application.exception.NoCarsNearFoundException;
 import io.github.zhyshko.application.repository.CarRepository;
+import io.github.zhyshko.application.repository.DrivingRepository;
 import io.github.zhyshko.application.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -22,10 +26,17 @@ public class CarService {
 	private static final int CAR_SEARCH_RADIUS_KM = 100;
 	
 	private final CarRepository carRepository;
+	private final DrivingRepository drivingRepository;
 	private final OrderRepository orderRepository;
 	
-	public List<Car> getAllAvailableCars(){
-		return this.carRepository.findAllByStatusId(1).orElseThrow(()->new NoCarsFoundException("No active cars found"));
+	private List<Car> getAllAvailableCars(){
+		return this.drivingRepository.findAllCarsByStatusAndDayOfDriving(1, LocalDate.now()).orElseThrow(()->new NoCarsFoundException("No active cars found")).stream()
+				.map(Driving::getCar)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Car> getAllAvailableCarsToday(){
+		return getAllAvailableCars();
 	}
 	
 	public void setCarBusy(Car car) {
@@ -46,9 +57,16 @@ public class CarService {
 		return this.carRepository.findCarStatusById(statusId);
 	}
 	
+	private List<Car> getAllCarsByPassengerCountAndCategoryAndStatusAndDayOfDriving(int passengerCount, String category, int status, LocalDate dayOfDriving){
+		return this.drivingRepository.findAllCarsByPassengerCountAndCategoryAndStatusAndDayOfDriving(passengerCount, category, status, dayOfDriving).orElseThrow(()->new NoCarsFoundException("No active cars found"))
+				.stream()
+				.map(Driving::getCar)
+				.collect(Collectors.toList());
+	}
+	
 	public Car getNearestCarByPlacesCountAndCategory(Coordinates customerCoordinates, int passengerCount, String category) {
-		List<Car> allCarsByCategoryAndPlacesCount = this.carRepository.findAllByPassengerCountAndCategoryAndStatus(passengerCount, category, 1).orElseThrow(()->new NoCarsFoundException("No active cars found"));
-		Car nearestCar =  allCarsByCategoryAndPlacesCount
+		List<Car> allCarsByCategoryAndPlacesCountAndDate = getAllCarsByPassengerCountAndCategoryAndStatusAndDayOfDriving(passengerCount, category, 1, LocalDate.now());
+		Car nearestCar =  allCarsByCategoryAndPlacesCountAndDate
 				.stream()
 				.min(getDistanceSortComparator(customerCoordinates))
 				.orElseThrow(()->new NoCarsNearFoundException("No active cars nearby found"));

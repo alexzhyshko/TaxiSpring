@@ -23,7 +23,7 @@ public class CarController {
 	
 	@GetMapping("/car/getAll")
 	public ResponseEntity<List<Car>> getAllAvailableCars(@RequestHeader(required=true, name="User_Locale") String userLocale) {
-		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCars(), userLocale);
+		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCarsToday(), userLocale);
 		return new ResponseEntity<>(cars, HttpStatus.OK);
 	}
 	

@@ -169,7 +169,8 @@ public class OrderService {
 
 			}
 		}
-
+		if(result.isEmpty())
+			throw new NoCarsFoundException("No active cars found for desired passenger count and route");
 		return result;
 	}
 

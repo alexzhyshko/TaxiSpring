@@ -15,14 +15,14 @@ public interface CarRepository extends CrudRepository<Car, Integer>{
 
 	public Optional<List<Car>> findAllByStatusId(int status);
 	
-	@Query("select car "
+	@Query(value="select car "
 			+ "from Car car "
 			+ "inner join car.category cat "
-			+ "join cat.translation cattransl inner "
-			+ "join car.status carstatus "
+			+ "inner join cat.translation cattransl "
+			+ "inner join car.status carstatus "
 			+ "where car.passengerCount= :passengerCount "
 			+ "and carstatus.id= :status "
-			+ "and (cattransl.text_EN= :category or cattransl.text_RU= :category or cattransl.text_UA= :category)")
+			+ "and (cattransl.text_EN= :category or cattransl.text_RU= :category or cattransl.text_UA= :category) ")
 	public Optional<List<Car>> findAllByPassengerCountAndCategoryAndStatus(int passengerCount, String category, int status);
 	
 	@Query("select car_status from CarStatus car_status where car_status.id= :statusId")

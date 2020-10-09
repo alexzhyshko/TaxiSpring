@@ -18,6 +18,7 @@ import io.github.zhyshko.application.dto.Order;
 import io.github.zhyshko.application.dto.request.OrderCreateRequest;
 import io.github.zhyshko.application.dto.response.RouteDetails;
 import io.github.zhyshko.application.dto.response.UserOrdersResponse;
+import io.github.zhyshko.application.exception.NoCarsFoundException;
 import io.github.zhyshko.application.exception.RouteNotCreatedException;
 import io.github.zhyshko.application.exception.SomethingWentWrongException;
 import io.github.zhyshko.application.service.OrderService;
@@ -54,16 +55,17 @@ public class OrderController {
 		return new ResponseEntity<>("Order finished", HttpStatus.OK);
 	}
 	
+	
 
-	@ExceptionHandler({ RouteNotCreatedException.class})
-    public ResponseEntity<String> handleRouteNotCreatedException(RouteNotCreatedException e) {
-		e.printStackTrace();
+	@ExceptionHandler({ RouteNotCreatedException.class, NoCarsFoundException.class})
+    public ResponseEntity<String> handleRouteNotCreatedException(Exception e) {
+		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 	
 	@ExceptionHandler({ SomethingWentWrongException.class})
     public ResponseEntity<String> handleException(Exception e) {
-		e.printStackTrace();
+		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 	
