@@ -64,7 +64,7 @@ public class CarService {
 				.collect(Collectors.toList());
 	}
 	
-	public Car getNearestCarByPlacesCountAndCategory(Coordinates customerCoordinates, int passengerCount, String category) {
+    public Car getNearestCarByPlacesCountAndCategory(Coordinates customerCoordinates, int passengerCount, String category) {
 		List<Car> allCarsByCategoryAndPlacesCountAndDate = getAllCarsByPassengerCountAndCategoryAndStatusAndDayOfDriving(passengerCount, category, 1, LocalDate.now());
 		Car nearestCar =  allCarsByCategoryAndPlacesCountAndDate
 				.stream()

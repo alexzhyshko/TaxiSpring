@@ -52,13 +52,13 @@ public class AuthController {
 		this.authService.logout(logoutRequest);
 		return ResponseEntity.status(HttpStatus.OK).body("Logged out");
 	}
-	
+
 	@ExceptionHandler({ DuplicateLoginException.class})
     public ResponseEntity<String> handleDuplicateLoginException(Exception e) {
 		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
-	
+
 	@ExceptionHandler({ Exception.class})
     public ResponseEntity<String> handleException(Exception e) {
 		//e.printStackTrace();

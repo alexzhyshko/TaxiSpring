@@ -38,7 +38,7 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
-	
+
 	@Transactional
 	public void verifyAccount(String token) {
 		String username = verificationTokenRepository.findByToken(token)
@@ -51,7 +51,7 @@ public class AuthService {
 	@Transactional
 	public UserToken signup(RegisterRequest registerRequest) {
 		User user = User.builder().username(registerRequest.getUsername())
-				.password(passwordEncoder.encode(registerRequest.getPassword())).role(Role.ADMIN).rating(5.0f).build();
+				.password(passwordEncoder.encode(registerRequest.getPassword())).role(Role.USER).rating(5.0f).build();
 		userRepository.save(user);
 		String token = generateVerificationTokenAndSaveItToDatabase(user);
 		return UserToken.builder()
@@ -81,7 +81,7 @@ public class AuthService {
 				.username(loginRequest.getUsername())
 				.build();
 	}
-	
+
 
 	public RefreshTokenResponse refreshToken(String refreshToken, String username) {
 		refreshTokenService.validateRefreshToken(refreshToken);
@@ -92,7 +92,7 @@ public class AuthService {
 				.refreshToken(refreshToken)
 				.build();
 	}
-	
+
 	public Optional<String> getCurrentAuthenticatedUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -100,7 +100,7 @@ public class AuthService {
 		}
 		return Optional.empty();
 	}
-	
+
 	public void logout(LogoutRequest logoutRequest) {
 		LoginRegister.removeFromRegisterIfLoggedIn(logoutRequest.getUsername()).orElseThrow(()-> new DuplicateLoginException("User is not logged in"));
 		SecurityContextHolder.getContext().setAuthentication(null);

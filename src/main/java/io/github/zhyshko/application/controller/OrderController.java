@@ -18,6 +18,7 @@ import io.github.zhyshko.application.dto.Order;
 import io.github.zhyshko.application.dto.request.OrderCreateRequest;
 import io.github.zhyshko.application.dto.response.RouteDetails;
 import io.github.zhyshko.application.dto.response.UserOrdersResponse;
+import io.github.zhyshko.application.exception.NearestCarTooFarException;
 import io.github.zhyshko.application.exception.NoCarsFoundException;
 import io.github.zhyshko.application.exception.RouteNotCreatedException;
 import io.github.zhyshko.application.exception.SomethingWentWrongException;
@@ -29,44 +30,44 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
 	private final OrderService orderService;
-	
+
 	@PostMapping("/order/create")
 	public ResponseEntity<Order> tryCreateOrder(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestBody(required=true) OrderCreateRequest orderDetails) {
 		Order orderCreated = OrderEntityToDTOConverter.convertToDto(orderService.tryCreateRouteAndThenOrder(orderDetails), userLocale);
 		return new ResponseEntity<>(orderCreated, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/order/getRouteDetails")
 	public ResponseEntity<List<RouteDetails>> getRouteDetails(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestBody(required=true) OrderCreateRequest orderDetails) {
 		List<RouteDetails> availableRoutesDetails = this.orderService.getAvailableRoutesDetailsByEveryCategory(orderDetails, userLocale);
 		return new ResponseEntity<>(availableRoutesDetails, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/order/get/byUserId")
 	public ResponseEntity<UserOrdersResponse> getOrdersByUserId(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) UUID userId, @RequestParam(required=true) Integer page) {
 		UserOrdersResponse userOrdersPage = this.orderService.getOrdersByUserIdPaginated(userId, page, userLocale);
 		return new ResponseEntity<>(userOrdersPage, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/order/finish")
 	public ResponseEntity<String> finishOrderById(@RequestHeader(required=true, name="User_Locale") String userLocale, @RequestParam(required=true) Integer orderId) {
 		if(!this.orderService.tryFinishOrderById(orderId))
 			throw new SomethingWentWrongException("Could not finish order");
 		return new ResponseEntity<>("Order finished", HttpStatus.OK);
 	}
-	
-	
 
-	@ExceptionHandler({ RouteNotCreatedException.class, NoCarsFoundException.class})
+
+
+	@ExceptionHandler({ RouteNotCreatedException.class, NoCarsFoundException.class, NearestCarTooFarException.class})
     public ResponseEntity<String> handleRouteNotCreatedException(Exception e) {
 		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-	
+
 	@ExceptionHandler({ SomethingWentWrongException.class})
     public ResponseEntity<String> handleException(Exception e) {
 		//e.printStackTrace();
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-	
+
 }

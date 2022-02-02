@@ -20,17 +20,17 @@ import lombok.RequiredArgsConstructor;
 public class CarController {
 
 	private final CarService carService;
-	
+
 	@GetMapping("/car/getAll")
 	public ResponseEntity<List<Car>> getAllAvailableCars(@RequestHeader(required=true, name="User_Locale") String userLocale) {
 		List<Car> cars = CarEntityToDTOConverter.convertToDto(this.carService.getAllAvailableCarsToday(), userLocale);
 		return new ResponseEntity<>(cars, HttpStatus.OK);
 	}
-	
-	
+
+
 	@ExceptionHandler({ NoCarsFoundException.class})
     public ResponseEntity<String> handleException(Exception e) {
 		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-	
+
 }

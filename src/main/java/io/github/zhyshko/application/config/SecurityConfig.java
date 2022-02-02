@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/driver/**").permitAll()
 		.antMatchers("/register/**", "/login/**", "/refreshToken/**", "/signoff/**").permitAll()
 		.antMatchers("/admin/**").hasAuthority("ADMIN")
-		.antMatchers("/v2/api-docs", 
+		.antMatchers("/v2/api-docs",
 				"/configuration/ui",
 				"/swagger-resources/**",
 				"/configuration/security",
@@ -62,16 +62,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
-	
+
 	@Bean(name = "sessionRegistry")
     public SessionRegistry getSessionRegistry() {
         return new SessionRegistryImpl();
     }
-	
+
 	 @Bean
 	    public CorsConfigurationSource corsConfigurationSource() {
 	        final CorsConfiguration configuration = new CorsConfiguration();
-	        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+	        configuration.setAllowedOrigins(Arrays.asList("http://35.211.20.205:4200"));
 	        configuration.setAllowedMethods(Arrays.asList("HEAD","GET", "POST", "PUT", "DELETE", "PATCH"));
 	        configuration.setAllowCredentials(true);
 	        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type", "User_Locale"));
@@ -85,26 +85,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
     }
-     
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-     
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-         
+
         return authProvider;
     }
- 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
